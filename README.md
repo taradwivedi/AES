@@ -2,7 +2,7 @@
 Java Dependency (OpenJDK for LanguageTool) 
 LanguageTool (via language_tool_python) requires Java (JRE/JDK) on the server. 
 Render.com and most cloud platforms do not install Java by default. 
-On Render, you can add a build script or a start command to install Java before starting your app. 
+On Render, you can add a build script or a start command to install Java before starting your application.
  
 Example for Render: 
  
