@@ -11,8 +11,8 @@ apt-get update && apt-get install -y openjdk-21-jre
 In your Render dashboard, set the build command to: 
 Or, if using a render.yaml, add: 
  
-buildCommand: | 
-  apt-get update 
-  apt-get install -y openjdk-21-jre 
+buildCommand: |  
+  apt-get update  
+  apt-get install -y openjdk-21-jre  
  
 Note: You do NOT add the .msi installer to your repo. The server must install Java using Linux commands. 
