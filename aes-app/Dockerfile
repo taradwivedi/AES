@@ -19,6 +19,11 @@ COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
+# Preload LanguageTool model at build time to avoid slow startup
+RUN python -c "import language_tool_python; language_tool_python.LanguageTool('en-US')"
+RUN python -c 'import torch; torch.load("lstm_model.pth", map_location="cpu")'
+
+
 # Copy all app files
 COPY . .
 
@@ -26,4 +31,4 @@ COPY . .
 EXPOSE 5000
 
 # Use the dynamic PORT environment variable (Render sets $PORT)
-CMD ["sh", "-c", "gunicorn app:app --bind 0.0.0.0:$PORT"]
+CMD ["sh", "-c", "gunicorn app:app --preload --bind 0.0.0.0:$PORT --workers 1"]
