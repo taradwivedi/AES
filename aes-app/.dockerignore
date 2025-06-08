@@ -1,0 +1,39 @@
+# Ignore version control
+.git
+.gitignore
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local virtual environments
+env/
+.venv/
+venv/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor settings
+.vscode/
+.idea/
+
+# Build/test/output files
+*.log
+*.coverage
+coverage/
+dist/
+build/
+*.egg-info/
+
+# Gunicorn config (just in case!)
+gunicorn.conf.py
+
+# Render build files
+render.yaml
+
+# Other files you don't need in Docker
+*.swp
