@@ -21,11 +21,11 @@ RUN pip install -r requirements.txt
 
 # Preload LanguageTool model at build time to avoid slow startup
 RUN python -c "import language_tool_python; language_tool_python.LanguageTool('en-US')"
-RUN python -c 'import torch; torch.load("lstm_model.pth", map_location="cpu")'
-
 
 # Copy all app files
 COPY . .
+
+RUN python -c 'import torch; torch.load("lstm_model.pth", map_location="cpu")'
 
 # Expose the port (for documentation; optional)
 EXPOSE 5000
