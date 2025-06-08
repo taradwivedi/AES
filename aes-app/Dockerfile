@@ -31,4 +31,4 @@ RUN python -c 'import torch; torch.load("lstm_model.pth", map_location="cpu")'
 EXPOSE 5000
 
 # Use the dynamic PORT environment variable (Render sets $PORT)
-CMD ["sh", "-c", "gunicorn app:app --preload --bind 0.0.0.0:$PORT --workers 1 --log-level debug"]
+CMD ["sh", "-c", "find . -print; gunicorn app:app --preload --bind 0.0.0.0:$PORT --workers 1 --log-level debug"]
