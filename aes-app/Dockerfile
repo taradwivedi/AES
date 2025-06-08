@@ -1,34 +1,29 @@
-# Use official Python base image
-FROM python:3.12-slim
+# Use official Python 3.10 image (compatible with torch, tensorflow)
+FROM python:3.10-slim
 
-# Set environment variables for Java (OpenJDK 17)
+# Install Java (needed for language_tool_python)
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jre && \
+    apt-get clean
+
+# Set Java environment variables
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
-
-# Install Java (OpenJDK 17) and any dependencies
-RUN apt-get update && apt-get install -y openjdk-17-jdk && \
-    rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Copy requirements first for caching
-COPY requirements.txt .
-
-# Install Python dependencies
+# Copy requirements and install Python dependencies
+COPY requirements.txt ./
 RUN pip install --upgrade pip
+RUN pip install "setuptools<81"
 RUN pip install -r requirements.txt
 
-# Preload LanguageTool model at build time to avoid slow startup
-RUN python -c "import language_tool_python; language_tool_python.LanguageTool('en-US')"
-
-# Copy all app files
+# Copy all project files
 COPY . .
 
-RUN python -c 'import torch; torch.load("lstm_model.pth", map_location="cpu")'
+# Expose the port that Render will connect to
+EXPOSE 10000
 
-# Expose the port (for documentation; optional)
-EXPOSE 5000
-
-# Use the dynamic PORT environment variable (Render sets $PORT)
-CMD ["sh", "-c", "find . -print; gunicorn app:app --preload --bind 0.0.0.0:$PORT --workers 1 --log-level debug"]
+# Start Gunicorn with proper working directory and app reference
+CMD ["gunicorn", "--bind", "0.0.0.0:10000", "--log-level=debug", "app:app"]
